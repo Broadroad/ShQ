@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    ShmCache cache("/tmp/test", BLK * 32);
+    ShmCache cache("/tmp/test", BLK * 32, true);
     for (int i = 0;;i++) {
         uint8_t p[10];
         memcpy(p, cache.Data(i), 9);
