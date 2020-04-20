@@ -13,6 +13,10 @@ int main(int argc, char* argv[]) {
     for (int i = 0;;i++) {
         uint8_t a[BLK] = {0};
         memcpy(cache.Data(i), a, BLK);
+        for (int j = 0; j < BLK; j++) {
+            cout << *(cache.Data(i) + j) << " ";
+        }
+        cout << endl;
         sleep(1);
     } 
     return 0;

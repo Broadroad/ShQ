@@ -13,8 +13,8 @@ int main(int argc, char* argv[]) {
     for (int i = 0;;i++) {
         uint8_t p[BLK];
         memcpy(p, cache.Data(i), 9);
-        for (int i = 0; i < BLK; i++) {
-            cout << p[i] << " ";
+        for (int j = 0; j < BLK; j++) {
+            cout << p[j] << " ";
         }
         std::cout << endl;
         sleep(1);
