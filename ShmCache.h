@@ -24,7 +24,7 @@ public:
 		    exit(2);
         } 
         ftruncate(fd_, size);
-        p_ = (uint8_t*)mmap(NULL, size, PROT_READ|PROT_WRITE,MAP_SHARED, fd, 0);
+        p_ = (uint8_t*)mmap(NULL, size, PROT_READ|PROT_WRITE,MAP_SHARED, fd_, 0);
         if (p_ == MAP_FAILED) {
             perror("mmap");
 		    exit(3);
@@ -37,7 +37,7 @@ public:
             perror("open");
 		    exit(2);
         } 
-        p_ = (uint8_t*)mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+        p_ = (uint8_t*)mmap(NULL, size, PROT_READ, MAP_SHARED, fd_, 0);
         if (p_ == MAP_FAILED) {
             perror("mmap");
 		    exit(3);
