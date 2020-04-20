@@ -1,11 +1,13 @@
 #include <iostream>
-#include<stdio.h>
-#include<stdlib.h>
-#include<unistd.h>
-#include<fcntl.h>
-#include<sys/types.h>
-#include<sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/mman.h>
+#include <string.h>
+
 using namespace std;
 const int BLK = 2 * 1024;
 class ShmCache {
@@ -15,13 +17,13 @@ private:
     uint32_t size_;
     string name_;
 public:
-    ShmCache(string name, int size) : name_(name), size_(size) {
-        fd_ = open(name, O_RDWR|O_CREAT|O_TRUNC,0644);
+    ShmCache(string name, int size) : size_(size), name_(name) {
+        fd_ = open(name.c_str(), O_RDWR|O_CREAT|O_TRUNC,0644);
         if (fd_ < 0) {
             perror("open");
 		    exit(2);
         } 
-        ftruncate(fd, size);
+        ftruncate(fd_, size);
         p_ = (uint8_t*)mmap(NULL, size, PROT_READ|PROT_WRITE,MAP_SHARED, fd, 0);
         if (p_ == MAP_FAILED) {
             perror("mmap");
@@ -29,13 +31,12 @@ public:
         } 
     }
 
-    ShmCache(string name, int size) : name_(name), size_(size) {
-        fd_ = open(name,O_RDONLY,0644);
+    ShmCache(string name, int size, bool read) : size_(size), name_(name) {
+        fd_ = open(name.c_str(), O_RDONLY, 0644);
         if (fd_ < 0) {
             perror("open");
 		    exit(2);
         } 
-        ftruncate(fd, size);
         p_ = (uint8_t*)mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
         if (p_ == MAP_FAILED) {
             perror("mmap");
@@ -45,7 +46,7 @@ public:
 
     ~ShmCache() {
         close(fd_);
-        int ret = munmap(p_, size_));
+        int ret = munmap(p_, size_);
         if(ret < 0) {
             perror("mmumap");
             exit(4);
