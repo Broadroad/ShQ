@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
 
     ShmCache cache("/tmp/test", BLK * 32, true);
     for (int i = 0;;i++) {
-        uint8_t p[10];
+        uint8_t p[BLK];
         memcpy(p, cache.Data(i), 9);
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < BLK; i++) {
             cout << p[i] << " ";
         }
         std::cout << endl;
