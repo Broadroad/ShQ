@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     ShmCache cache("/tmp/test", BLK * 32, true);
     for (int i = 0;;i++) {
         uint8_t p[BLK];
-        memcpy(p, cache.Data(i), 9);
+        memcpy(p, cache.Data(i), BLK);
         for (int j = 0; j < BLK; j++) {
             cout << p[j] << " ";
         }
