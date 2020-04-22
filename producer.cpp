@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0;;i++) {
         uint8_t a[BLK];
         for (int j = 0; j < BLK; j++) {
-            a[j] = 57;
+            a[j] = j % 10 + '0';
         }
         memcpy(cache.Data(i), a, BLK);
         for (int j = 0; j < BLK; j++) {
