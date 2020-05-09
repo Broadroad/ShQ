@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    Cache Cache = new ShmCache("/tmp/test", BLK * 32, true);
+    Cache *Cache = new ShmCache("/tmp/test", BLK * 32, true);
     for (int i = 0;;i++) {
         uint8_t p[BLK];
         memcpy(p, cache->Data(i), BLK);

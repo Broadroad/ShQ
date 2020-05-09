@@ -11,7 +11,7 @@
 #include "cache.h"
 
 using namespace std;
-const int BLK = 2 * 1024;
+const uint8_t BLK = 2 * 1024;
 class ShmCache : public Cache{
 private:
     int fd_;
@@ -47,14 +47,15 @@ public:
 
     ~ShmCache() {
         close(fd_);
-        int ret = munmap(p_, size_);
+
+        int ret = munmap(p_, Size());
         if(ret < 0) {
             perror("mmumap");
             exit(4);
         }
     }
 
-    void uint8_t* Data(int x) {
+    uint8_t* Data(int x) {
         return p_ + x * BLK; 
     }
 };
