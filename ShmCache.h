@@ -8,16 +8,17 @@
 #include <sys/mman.h>
 #include <string.h>
 
+#include "cache.h"
+
 using namespace std;
 const int BLK = 2 * 1024;
-class ShmCache {
+class ShmCache : public Cache{
 private:
     int fd_;
     uint8_t *p_;
-    uint32_t size_;
     string name_;
 public:
-    ShmCache(string name, int size) : size_(size), name_(name) {
+    ShmCache(string name, int size) : Cache(size), name_(name) {
         fd_ = open(name.c_str(), O_RDWR|O_CREAT|O_TRUNC,0644);
         if (fd_ < 0) {
             perror("open");
@@ -31,7 +32,7 @@ public:
         } 
     }
 
-    ShmCache(string name, int size, bool read) : size_(size), name_(name) {
+    ShmCache(string name, int size, bool read) : Cache(size), name_(name) {
         fd_ = open(name.c_str(), O_RDONLY, 0644);
         if (fd_ < 0) {
             perror("open");
@@ -53,7 +54,7 @@ public:
         }
     }
 
-    uint8_t* Data(int x) {
+    void uint8_t* Data(int x) {
         return p_ + x * BLK; 
     }
 };
