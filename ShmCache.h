@@ -11,7 +11,7 @@
 #include "cache.h"
 
 using namespace std;
-const uint8_t BLK = 2 * 1024;
+const int BLK = 2 * 1024;
 class ShmCache : public Cache{
 private:
     int fd_;
