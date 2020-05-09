@@ -55,7 +55,7 @@ public:
         }
     }
 
-    uint8_t* Data(int x) {
+    uint8_t* Data(int x) const {
         return p_ + x * BLK; 
     }
 };
