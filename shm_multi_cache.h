@@ -1,6 +1,7 @@
 #ifndef SHM_MULTI_CACHE
 #define SHM_MULTI_CACHE
 
+#include <vector>
 #include "cache.h"
 
 using namespace std;
@@ -20,12 +21,12 @@ private:
     vector<HugepageFileInfo> hugeFiles; 
     HugepageFileInfo gen(int num) {
         string name = "/tmp/shm_" + to_string(num);
-        int fd = open(name_.c_str(), O_RDWR|O_CREAT|O_TRUNC, 0644);
+        int fd = open(name.c_str(), O_RDWR|O_CREAT|O_TRUNC, 0644);
         if (fd < 0) {
             cout << "Open Shared Memory failed" << endl;
         }
         ftruncate(fd, BLK);
-        uint8_t* p = (uint8_t *)mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+        uint8_t* p = (uint8_t *)mmap(NULL, BLK, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
         if (p == MAP_FAILED) {
             cout << "Mmap Shared Memory failed" << endl;
         }
@@ -41,7 +42,7 @@ private:
             perror("open");
 		    exit(2);
         } 
-        uint8_t *p = (uint8_t*)mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+        uint8_t *p = (uint8_t*)mmap(NULL, BLK, PROT_READ, MAP_SHARED, fd, 0);
         if (p == MAP_FAILED) {
             perror("mmap");
 		    exit(3);
