@@ -65,7 +65,8 @@ public:
             hugeFiles.push_back(get(i));
         }
     }
-    ~Shm_multi_cache();
+
+    ~Shm_multi_cache() {};
     vector<HugepageFileInfo> GetShms() {
         return hugeFiles;
     }
