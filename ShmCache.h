@@ -1,3 +1,6 @@
+#ifndef SHM_CACHE
+#define SHM_CACHE
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,3 +62,5 @@ public:
         return p_ + stoi(x) * BLK; 
     }
 };
+
+#endif

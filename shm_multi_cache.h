@@ -1,3 +1,6 @@
+#ifndef SHM_MULTI_CACHE
+#define SHM_MULTI_CACHE
+
 #include "cache.h"
 
 using namespace std;
@@ -17,32 +20,34 @@ private:
     vector<HugepageFileInfo> hugeFiles; 
     HugepageFileInfo gen(int num) {
         string name = "/tmp/shm_" + to_string(num);
-        fd_ = open(name_.c_str(), O_RDWR|O_CREAT|O_TRUNC, 0644);
-        if (fd_ < 0) {
+        int fd = open(name_.c_str(), O_RDWR|O_CREAT|O_TRUNC, 0644);
+        if (fd < 0) {
             cout << "Open Shared Memory failed" << endl;
         }
-        ftruncate(fd_, BLK);
-        p_ = (uint8_t *)mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd_, 0);
-        if (p_ == MAP_FAILED) {
+        ftruncate(fd, BLK);
+        uint8_t* p = (uint8_t *)mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+        if (p == MAP_FAILED) {
             cout << "Mmap Shared Memory failed" << endl;
         }
-        HugepageFileInfo h(p_, BLK, name);
+        uint64_t addr = reinterpret_cast<uint64_t>(p);
+        HugepageFileInfo h(addr, BLK, name);
         return h;
     }
 
     HugepageFileInfo get(int num) {
         string name = "/tmp/shm_" + to_string(num);
-        fd_ = open(name.c_str(), O_RDONLY, 0644);
-        if (fd_ < 0) {
+        int fd = open(name.c_str(), O_RDONLY, 0644);
+        if (fd < 0) {
             perror("open");
 		    exit(2);
         } 
-        p_ = (uint8_t*)mmap(NULL, size, PROT_READ, MAP_SHARED, fd_, 0);
-        if (p_ == MAP_FAILED) {
+        uint8_t *p = (uint8_t*)mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+        if (p == MAP_FAILED) {
             perror("mmap");
 		    exit(3);
         } 
-        HugepageFileInfo h(p_, BLK, name);
+        uint64_t addr = reinterpret_cast<uint64_t>(p);
+        HugepageFileInfo h(addr, BLK, name);
         return h;
     }
 public:
@@ -65,8 +70,10 @@ public:
     }
 
     uint8_t* Data(string x) const {
-        return hugeFiles[stoi(x)].addr; 
+        return reinterpret_cast<uint8_t*>(hugeFiles[stoi(x)].addr); 
     }
 };
 
 
+
+#endif
